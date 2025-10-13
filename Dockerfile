@@ -1,5 +1,5 @@
 # Imagen base ligera de Python
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Crear y entrar al directorio de la app
 WORKDIR /app
