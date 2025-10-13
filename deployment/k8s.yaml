@@ -27,7 +27,7 @@ spec:
         - name: contenedor-principal
           image: alexisvg2520/alexis_curso_clase1:1.0.1  # <-- Reemplaza con la imagen que quieras usar
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: mi-configmap
@@ -43,9 +43,10 @@ spec:
   selector:
     app: mi-app  # Debe coincidir con las labels del Deployment
   ports:
-    - protocol: TCP
-      port: 4000        # Puerto del Service
-      targetPort: 3000  # Puerto del contenedor
+    - name: http
+      protocol: TCP
+      port: 8080        # Puerto del Service
+      targetPort: 8080  # Puerto del contenedor
   type: ClusterIP     # Cambia a NodePort o LoadBalancer si quieres acceso externo
 ---
 apiVersion: v1
