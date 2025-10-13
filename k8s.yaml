@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alexis
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-deployment
+  namespace: alexis
+  labels:
+    app: mi-app
+    areanegocio: tecnologia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mi-app
+  template:
+    metadata:
+      labels:
+        app: mi-app
+    spec:
+      containers:
+        - name: contenedor-principal
+          image: forcet22/hola-node:2.0.0  # <-- Reemplaza con la imagen que quieras usar
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: mi-configmap
+            - secretRef:
+                name: mi-secret  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-servicio
+  namespace: alexis  # Asegúrate de que coincida con tu Deployment
+spec:
+  selector:
+    app: mi-app  # Debe coincidir con las labels del Deployment
+  ports:
+    - protocol: TCP
+      port: 4000        # Puerto del Service
+      targetPort: 3000  # Puerto del contenedor
+  type: ClusterIP     # Cambia a NodePort o LoadBalancer si quieres acceso externo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mi-configmap
+  namespace: alexis
+data:
+  DATABASE: "192.168.1.1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mi-secret
+  namespace: alexis
+type: Opaque
+data:
+  PASSWORD: aG9sYQ==  # "password" en base64
