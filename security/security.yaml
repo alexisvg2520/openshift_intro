@@ -27,5 +27,5 @@ subjects:
   namespace: alexis
 roleRef:
   kind: Role
-  name: dashboard-readonly-role # El rol que creamos
+  name: dashboard-alexis # El rol que creamos
   apiGroup: rbac.authorization.k8s.io
