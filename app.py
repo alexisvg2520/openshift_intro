@@ -8,6 +8,6 @@ class HolaHandler(BaseHTTPRequestHandler):
         self.wfile.write(b"Hola Mundo")
 
 if __name__ == "__main__":
-    server = HTTPServer(("", 3000), HolaHandler)
+    server = HTTPServer(("", 8080), HolaHandler)
     print("Servidor iniciado en el puerto 8080...")
     server.serve_forever()

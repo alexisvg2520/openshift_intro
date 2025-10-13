@@ -8,7 +8,7 @@ WORKDIR /app
 COPY app.py .
 
 # Exponer el puerto donde correrá el servidor
-EXPOSE 3000
+EXPOSE 8080
 
 # Ejecutar la aplicación
 CMD ["python", "app.py"]
