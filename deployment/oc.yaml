@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ecuaalejo2013-dev
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-deployment
+  namespace: ecuaalejo2013-dev
+  labels:
+    app: mi-app
+    areanegocio: tecnologia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mi-app
+  template:
+    metadata:
+      labels:
+        app: mi-app
+    spec:
+      containers:
+        - name: contenedor-principal
+          image: alexisvg2520/alexis_curso_clase1:1.0.1  # <-- Reemplaza con la imagen que quieras usar
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "800Mi"
+            limits:
+              cpu: "800m"
+              memory: "1500Mi"
+          envFrom:
+            - configMapRef:
+                name: mi-configmap
+            - secretRef:
+                name: mi-secret  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-servicio
+  namespace: ecuaalejo2013-dev  # Asegúrate de que coincida con tu Deployment
+spec:
+  selector:
+    app: mi-app  # Debe coincidir con las labels del Deployment
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080        # Puerto del Service
+      targetPort: 8080  # Puerto del contenedor
+  type: ClusterIP     # Cambia a NodePort o LoadBalancer si quieres acceso externo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mi-configmap
+  namespace: ecuaalejo2013-dev
+data:
+  DATABASE: "192.168.1.1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mi-secret
+  namespace: ecuaalejo2013-dev
+
+type: Opaque
+data:
+  PASSWORD: aG9sYQ==  # "password" en base64
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mi-hpa
+  namespace: ecuaalejo2013-dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: deployment
+    name: mi-deployment
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
