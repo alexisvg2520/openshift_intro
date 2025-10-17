@@ -74,8 +74,8 @@ data:
   PASSWORD: aG9sYQ==  # "password" en base64
 
 ---
-apiVersion: autoscaling/v2beta2
-kind: HorizontalPodautoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
 metadata:
   name: mi-hpa
   namespace: alexis
