@@ -8,42 +8,67 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: dashboard-alexis
-  # Este rol existirá en el namespace del proyecto
   namespace: alexis
 rules:
-- apiGroups: ["", "apps", "autoscaling", "batch", "extensions", "networking.k8s.io", "storage.k8s.io"]
-  resources: ["configmaps", "endpoints", "events", "ingresses", "persistentvolumeclaims", "pods", "podtemplates", "replicationcontrollers", "resourcequotas", "secrets", "serviceaccounts", "services", "deployments", "daemonsets", "replicasets", "statefulsets", "horizontalpodautoscalers", "cronjobs", "jobs", "networkpolicies", "storageclasses"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["apps"]
-  resources: ["deployments/scale"]
-  verbs: ["*"]
-
-- kind: ServiceAccount
-  name: alexis-serviceaccount # La cuenta de servicio que creamos
+  - apiGroups: ["", "apps", "autoscaling", "batch", "networking.k8s.io"]
+    resources:
+      - configmaps
+      - endpoints
+      - events
+      - ingresses
+      - persistentvolumeclaims
+      - pods
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+      - horizontalpodautoscalers
+      - cronjobs
+      - jobs
+      - networkpolicies
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale", "statefulsets/scale", "replicasets/scale"]
+    verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: alexis-dashboard-readonly-binding
   namespace: alexis
+subjects:
+  - kind: ServiceAccount
+    name: alexis-serviceaccount
+    namespace: alexis
 roleRef:
-  kind: Role
-  name: dashboard-alexis # El rol que creamos
   apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dashboard-alexis
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: global-reader
 rules:
-- apiGroups: [""]
-  resources: ["namespaces"]
-  verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: alexis-global-readonly-binding
 subjects:
-- kind: ServiceAccount
-  name: alexis-serviceaccount # La cuenta de servicio que creamos
-  namespace: alexis
+  - kind: ServiceAccount
+    name: alexis-serviceaccount
+    namespace: alexis
 roleRef:
-  kind: ClusterRole
-  name: global-reader # El rol que creamos
   apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: global-reader
