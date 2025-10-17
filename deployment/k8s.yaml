@@ -28,6 +28,13 @@ spec:
           image: alexisvg2520/alexis_curso_clase1:1.0.1  # <-- Reemplaza con la imagen que quieras usar
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "800Mi"
+            limits:
+              cpu: "800m"
+              memory: "1500Mi"
           envFrom:
             - configMapRef:
                 name: mi-configmap
