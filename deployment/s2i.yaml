@@ -20,13 +20,15 @@ spec:
     git:
       uri: https://github.com/alexisvg2520/openshift_intro.git
       ref: master
-    contexDir: ''
+    contextDir: ''
   strategy:
-    from:
-      kind: ImageStreamTag
-      namespace: openshift
-      name: "python:3.12-ubi9"
-    output:
-      to: 
+    type: Source
+    sourceStrategy:
+      from:
         kind: ImageStreamTag
-        name: "ejercicio-codigo-s2i:latest"
+        namespace: openshift
+        name: "python:3.12-ubi9"
+  output:
+    to: 
+      kind: ImageStreamTag
+      name: "ejercicio-codigo-s2i:latest"
