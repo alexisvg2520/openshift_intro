@@ -1,0 +1,9 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: ejercicio-codigo-s2i
+  label:
+    app: ejercicio-codigo-s2i
+spec:
+  lookupPolicy:
+    local: false
