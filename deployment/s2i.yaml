@@ -7,3 +7,25 @@ metadata:
 spec:
   lookupPolicy:
     local: false
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: ejercicio-codigo-s2i
+  label:
+    app: ejercicio-codigo-s2i
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/alexisvg2520/openshift_intro.git
+      ref: master
+    contexDir: ''
+  strategy:
+    from:
+      kind: ImageStreamTag
+      namespace: openshift
+      name: "python:3.12-ubi9"
+    output:
+      to: ImageStreamTag
+      name: "ejercicio-codigo-s2i:latest"
