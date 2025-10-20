@@ -1,0 +1,26 @@
+name: CI-DockerBuild
+
+on: 
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    # El tipo de máquina virtual donde se ejecutará el job
+    runs-on: ubuntu-latest
+
+    # Los pasos que componen el job
+    steps:
+      # 1. Clona tu repositorio en la máquina virtual
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Construye la imagen de Docker
+      #    Utiliza el Dockerfile que se encuentra en la raíz de tu proyecto.
+      #    Esto no subirá la imagen a ningún registro (registry).
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
