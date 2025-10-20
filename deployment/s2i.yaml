@@ -27,5 +27,6 @@ spec:
       namespace: openshift
       name: "python:3.12-ubi9"
     output:
-      to: ImageStreamTag
-      name: "ejercicio-codigo-s2i:latest"
+      to: 
+        kind: ImageStreamTag
+        name: "ejercicio-codigo-s2i:latest"
