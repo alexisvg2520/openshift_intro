@@ -15,10 +15,21 @@ spec:
     metadata:
       labels:
         app: mi-app
+      annotations:
+        image.openshift.io/triggers:  |
+          [
+            {
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "ejercicio-codigo-s2i:latest"
+              },
+              "fieldPath": "spec.template.spec.containers[?(@.name==\"contenedor-principal\")].image"
+            }
+          ]
     spec:
       containers:
         - name: contenedor-principal
-          image: alexisvg2520/alexis_curso_clase1:1.0.1  # <-- Reemplaza con la imagen que quieras usar
+          image: image-registry.openshift-image-registry.svc:5000/ecuaalejo2013-dev/ejercicio-codigo-s2i:latest  # <-- Reemplaza con la imagen que quieras usar
           ports:
             - containerPort: 8080
           resources:
