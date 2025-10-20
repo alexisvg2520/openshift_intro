@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  # El nombre que usarás para referenciar esta ServiceAccount
+  name: cicd-serviceaccount
+  # Opcional: El namespace donde se creará. Si se omite, se usará 'default'.
+  namespace: ecuaalejo2013-dev
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cicd-binding
+  namespace: ecuaalejo2013-dev
+subjects:
+- kind: ServiceAccount
+  name: cicd-serviceaccount # La cuenta de servicio que creamos
+  namespace: ecuaalejo2013-dev
+roleRef:
+  kind: ClusterRole
+  name: edit # El rol que creamos
+  apiGroup: rbac.authorization.k8s.io
