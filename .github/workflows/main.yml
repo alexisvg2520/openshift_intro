@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "Reemplazando {{ tag }} con ${{ github.run_number }}"
           sed -i "s|{{ tag }}|${{ github.run_number }}|g" oc.yaml
-          cat oc.yaml
+          cat deployment/oc.yaml
       - name: Deploy files
         run: |
           oc project ecuaalejo2013-dev
