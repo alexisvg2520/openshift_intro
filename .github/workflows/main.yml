@@ -27,6 +27,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKERHUB_NAME  }}/holamundobase
+          tags: |
+            type=raw,value=build-${{ github.run_number }}
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
@@ -54,7 +56,13 @@ jobs:
         with:
           openshift_server_url: https://api.rm1.0a51.p1.openshiftapps.com:6443
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-      
+      - name: Update Deployment tag
+        env:
+          TAG:  build-${{ github.run_number }}
+        run: |
+          envsubst < oc.yaml > oc.tmp
+          mv oc.tmp oc.yaml
+          cat oc.yaml
       - name: Deploy files
         run: |
           oc project ecuaalejo2013-dev

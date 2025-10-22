@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: contenedor-principal
-          image: image-registry.openshift-image-registry.svc:5000/ecuaalejo2013-dev/ejercicio-codigo-s2i:latest  # <-- Reemplaza con la imagen que quieras usar
+          image: alexisvg2520/holamundobase:{{ tag }}  # <-- Reemplaza con la imagen que quieras usar
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
