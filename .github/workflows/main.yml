@@ -41,6 +41,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install OC CLI
+        run: |
+          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz
+          sudo mv oc /usr/local/bin/
+          oc version
       - name: Log in Openshif
         uses: redhat-actions/oc-login@v1
         with:
