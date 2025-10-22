@@ -58,4 +58,4 @@ jobs:
       - name: Deploy files
         run: |
           oc project ecuaalejo2013-dev
-          oc apply -f /deployment/oc.yaml
+          oc apply -f deployment/oc.yaml
