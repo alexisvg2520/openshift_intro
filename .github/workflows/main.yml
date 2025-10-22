@@ -67,3 +67,4 @@ jobs:
         run: |
           oc project ecuaalejo2013-dev
           oc apply -f deployment/oc.yaml
+          oc rollout status deployment/mi-deployment
