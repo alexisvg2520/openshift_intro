@@ -60,11 +60,10 @@ jobs:
         env:
           TAG:  build-${{ github.run_number }}
         run: |
-          envsubst < oc.yaml > oc.tmp
-          mv oc.tmp oc.yaml
+          echo "Reemplazando {{ tag }} con ${{ github.run_number }}"
+          sed -i "s|{{ tag }}|${{ github.run_number }}|g" oc.yaml
           cat oc.yaml
       - name: Deploy files
         run: |
           oc project ecuaalejo2013-dev
           oc apply -f deployment/oc.yaml
-          oc rollout status deployment/mi-deployment
