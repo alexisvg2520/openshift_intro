@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: contenedor-principal
-          image: alexisvg2520/holamundobase:{{ tag }}  # <-- Reemplaza con la imagen que quieras usar
+          image: alexisvg2520/holamundobase:build-{{ tag }}  # <-- Reemplaza con la imagen que quieras usar
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
