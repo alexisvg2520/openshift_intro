@@ -95,7 +95,7 @@ metadata:
   name: mi-pvc
   namespace: ecuaalejo2013-dev
 spec:
-  accesMode:
+  accesModes:
     - ReadWriteOnce
   resources:
     request:
