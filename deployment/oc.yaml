@@ -36,7 +36,7 @@ spec:
                 name: mi-secret
           volumeMounts:
             - name: datos
-              mount: /app/data
+              mountPath: /app/data 
       volumes:
         - name: datos
           persistentVolumeClaim:
