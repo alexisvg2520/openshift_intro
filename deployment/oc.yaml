@@ -33,7 +33,14 @@ spec:
             - configMapRef:
                 name: mi-configmap
             - secretRef:
-                name: mi-secret  
+                name: mi-secret
+          volumeMounts:
+            - name: datos
+              mount: /app/data
+      volumes:
+        - name: datos
+          persistentVolumeClaim:
+            claimName: mi-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -95,7 +102,7 @@ metadata:
   name: mi-pvc
   namespace: ecuaalejo2013-dev
 spec:
-  accessMode:
+  accessModes:
     - ReadWriteOnce
   resources:
     requests:
