@@ -69,5 +69,5 @@ jobs:
           cat values.yaml
       - name: Deploy files
         run: |
-            helm show chart oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.3
-            helm upgrade --install microservicio-1 oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.3 --values values.yaml
+            helm show chart oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.4
+            helm upgrade --install microservicio-1 oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.4 --values values.yaml

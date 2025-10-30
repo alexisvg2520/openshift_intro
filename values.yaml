@@ -67,6 +67,7 @@ hpa:
 
 storage:
   enabled: true
+  volumeName: "datos" 
   mountPath: "/app/data"
   size: "1Gi"
   storageClassName: "gp3"
