@@ -71,3 +71,4 @@ jobs:
         run: |
             helm show chart oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.6
             helm upgrade --install microservicio-1 oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.6 --values values.yaml
+            
