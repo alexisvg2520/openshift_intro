@@ -51,6 +51,10 @@ jobs:
           curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz
           sudo mv oc /usr/local/bin/
           oc version
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
       - name: Log in Openshift
         uses: redhat-actions/oc-login@v1
         with:
@@ -62,9 +66,8 @@ jobs:
         run: |
           echo "Reemplazando {{ tag }} con ${{ github.run_number }}"
           sed -i "s|{{ tag }}|${{ github.run_number }}|g" deployment/oc.yaml
-          cat deployment/oc.yaml
+          cat values.yaml
       - name: Deploy files
         run: |
-          oc project ecuaalejo2013-dev
-          oc apply -f deployment/oc.yaml
-          oc rollout status deployment/mi-deployment
+            helm show chart oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.3
+            helm upgrade --install microservicio-1 oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.3 --values values.yaml
