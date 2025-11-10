@@ -10,4 +10,4 @@ jobs:
     uses: alexisvg2520/devops-pipelines/.github/workflows/docker-workflow.yml@master
     with:
       docker_image_name: holamundobase
-      secrets: inherit
+    secrets: inherit
