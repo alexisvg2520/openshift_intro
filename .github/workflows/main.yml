@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: alexisvg2520/devops-pipelines/.github/workflows/docker-workflow.yml@main
+    uses: alexisvg2520/devops-pipelines/.github/workflows/docker-workflow.yml@master
     with:
       docker_image_name: holamundobase
       secrets: inherit
