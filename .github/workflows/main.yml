@@ -7,7 +7,68 @@ on:
 
 jobs:
   build:
-    uses: alexisvg2520/devops-pipelines/.github/workflows/docker-workflow.yml@master
-    with:
-      docker_image_name: holamundobase
-    secrets: inherit
+    # El tipo de máquina virtual donde se ejecutará el job
+    runs-on: ubuntu-latest
+
+    # Los pasos que componen el job
+    steps:
+      # 1. Clona tu repositorio en la máquina virtual
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_NAME  }}
+          password: ${{ secrets.DOCKERHUB_TOKEN  }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_NAME  }}/holamundobase
+          tags: |
+            type=raw,value=build-${{ github.run_number }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install OC CLI
+        run: |
+          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz
+          sudo mv oc /usr/local/bin/
+          oc version
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+      - name: Log in Openshift
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: https://api.rm1.0a51.p1.openshiftapps.com:6443
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+      - name: Update Deployment tag
+        env:
+          TAG:  build-${{ github.run_number }}
+        run: |
+          echo "Reemplazando {{ tag }} con ${{ github.run_number }}"
+          sed -i "s|{{ tag }}|${{ github.run_number }}|g" deployment/oc.yaml
+          cat values.yaml
+      - name: Deploy files
+        run: |
+            helm show chart oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.6
+            helm upgrade --install microservicio-1 oci://registry-1.docker.io/alexisvg2520/mi-chart --version 0.1.6 --values values.yaml
+            
